@@ -14,4 +14,5 @@ Esta pasta reúne as anotações da trilha *Data Engineering on Google Cloud*, *
 - Cada parte da trilha vira **um arquivo markdown**: `part-NN-titulo-em-kebab-case.md`.
 - Numeração com **dois dígitos** (`01`, `02`, …) para manter a ordenação correta.
 - Todo arquivo começa com um **sumário** e usa **tabelas de decisão** ("quando usar cada serviço").
+- Para começar uma parte nova, copie o [`_template.md`](_template.md) e renomeie seguindo o padrão acima.
 - Ao adicionar uma parte nova, atualize também este índice e a tabela do [README principal](../README.md).

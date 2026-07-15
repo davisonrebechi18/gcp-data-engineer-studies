@@ -19,6 +19,7 @@
 12. [Processamento em streaming](#12-processamento-em-streaming)
 13. [Automação e orquestração](#13-automação-e-orquestração)
 14. [Cheat sheet de decisão](#14-cheat-sheet-de-decisão)
+15. [Perguntas de prática](#15-perguntas-de-prática)
 
 ---
 
@@ -27,6 +28,17 @@
 Em essência, o engenheiro de dados **constrói pipelines de dados** para levar dados brutos até um destino útil (dashboard, relatório ou modelo de ML), onde a empresa toma decisões baseadas em dados. Dados brutos raramente são úteis por si só — o engenheiro aplica **transformações** que agregam valor e cria os **processos de produção**.
 
 O pipeline tem **quatro etapas**:
+
+```mermaid
+flowchart LR
+    A[Replicação<br/>& Migração] --> B[Ingestão]
+    B --> C[Transformação]
+    C --> D[Armazenamento]
+    A -.-> a1([gcloud storage<br/>Datastream])
+    B -.-> b1([Cloud Storage<br/>Pub/Sub])
+    C -.-> c1([Dataflow<br/>Dataproc · Dataform])
+    D -.-> d1([BigQuery<br/>Bigtable])
+```
 
 | Etapa | O que faz | Produtos GCP típicos |
 |-------|-----------|----------------------|
@@ -125,6 +137,19 @@ A facilidade de migração depende fortemente de **dois fatores: tamanho dos dad
 ---
 
 ## 6. Padrões de transformação: EL, ELT e ETL
+
+```mermaid
+flowchart LR
+    subgraph EL
+        e1[Extract] --> l1[Load]
+    end
+    subgraph ELT
+        e2[Extract] --> l2[Load] --> t2[Transform<br/>no BigQuery]
+    end
+    subgraph ETL
+        e3[Extract] --> t3[Transform<br/>Dataflow/Dataproc] --> l3[Load]
+    end
+```
 
 | Padrão | Ordem | Quando usar |
 |--------|-------|-------------|
@@ -295,8 +320,12 @@ Transforma os dados **antes** de carregar no BigQuery. GCP oferece serviços par
 
 ### Fluxo ETL de streaming
 
-```
-Pub/Sub (ingestão de eventos) → Dataflow (processa/enriquece em tempo real) → BigQuery (análise) / Bigtable (NoSQL)
+```mermaid
+flowchart LR
+    S[Fontes de eventos] --> P[Pub/Sub<br/>ingestão]
+    P --> D[Dataflow<br/>Apache Beam<br/>processa/enriquece]
+    D --> BQ[(BigQuery<br/>análise)]
+    D --> BT[(Bigtable<br/>NoSQL, latência ms)]
 ```
 
 - **Pub/Sub** — mensageria assíncrona; hub central que recebe eventos e distribui para sistemas relevantes, com entrega confiável e comunicação desacoplada.
@@ -358,6 +387,64 @@ Cargas ELT/ETL podem ser automatizadas para execução recorrente:
 - Simples/agendado → Cloud Scheduler (YAML)
 - Workflows complexos → Cloud Composer (Airflow/DAG)
 - Orientado a evento → Cloud Run functions / Eventarc
+
+---
+
+## 15. Perguntas de prática
+
+> Baseadas nos quizzes dos módulos. Tente responder antes de expandir o gabarito.
+
+**Replicação e migração**
+
+1. Nas mensagens do Datastream, qual seção contém as alterações reais em formato chave-valor?
+   <details><summary>Resposta</summary>Payload.</details>
+2. Qual serviço move com eficiência grandes conjuntos de dados on-prem/multicloud/HDFS para o Cloud Storage e aceita transferências programadas?
+   <details><summary>Resposta</summary>Storage Transfer Service.</details>
+3. Qual ferramenta é mais adequada para migrar conjuntos de dados muito grandes **offline**?
+   <details><summary>Resposta</summary>Transfer Appliance.</details>
+4. Quais dois fatores influenciam fortemente a facilidade de migrar dados?
+   <details><summary>Resposta</summary>Tamanho dos dados e largura de banda da rede.</details>
+5. Qual ferramenta usa o comando `cp` para transferências ad-hoc diretamente para o Cloud Storage?
+   <details><summary>Resposta</summary>`gcloud storage`.</details>
+
+**Extract & Load / BigLake**
+
+6. Qual a principal vantagem das tabelas BigLake sobre as tabelas externas?
+   <details><summary>Resposta</summary>Melhor desempenho, segurança (nível de linha/coluna) e flexibilidade.</details>
+7. Como é a configuração de inatividade do cache de metadados do BigLake?
+   <details><summary>Resposta</summary>De 30 minutos a 7 dias, com atualização automática ou manual.</details>
+8. Com qual recurso você consulta dados no Cloud Storage **sem** carregá-los no BigQuery?
+   <details><summary>Resposta</summary>Tabelas externas.</details>
+9. Em qual cenário a instrução `LOAD DATA` é mais adequada?
+   <details><summary>Resposta</summary>Automatizar o carregamento em tabelas do BigQuery via script/aplicativo.</details>
+10. O que é o BigQuery Data Transfer Service?
+    <details><summary>Resposta</summary>Serviço gerenciado e serverless para agendar e automatizar transferências de dados de várias fontes.</details>
+
+**ETL / Dataproc / Streaming**
+
+11. Qual recurso torna o Dataproc Serverless para Spark ideal para desenvolvimento interativo?
+    <details><summary>Resposta</summary>Integração com o JupyterLab.</details>
+12. Qual serviço permite construir pipelines com interface visual drag-and-drop?
+    <details><summary>Resposta</summary>Cloud Data Fusion.</details>
+13. Qual a principal vantagem dos templates do Dataflow?
+    <details><summary>Resposta</summary>Reutilização e parametrização dos pipelines.</details>
+14. Qual serviço é serverless e no-code, baseado em *recipes*?
+    <details><summary>Resposta</summary>Dataprep.</details>
+15. Qual serviço é recomendado para streaming com latência de milissegundos?
+    <details><summary>Resposta</summary>Bigtable.</details>
+
+**Automação e orquestração**
+
+16. O que é um DAG no contexto do Cloud Composer?
+    <details><summary>Resposta</summary>Directed Acyclic Graph (grafo acíclico direcionado).</details>
+17. Qual serviço executa código em resposta a eventos do Google Cloud?
+    <details><summary>Resposta</summary>Cloud Run functions.</details>
+18. Qual serviço atua como orquestrador central integrando pipelines em diversos sistemas?
+    <details><summary>Resposta</summary>Cloud Composer.</details>
+19. Qual serviço permite criar uma arquitetura orientada a eventos para serviços fracamente acoplados?
+    <details><summary>Resposta</summary>Eventarc.</details>
+20. Qual serviço automatiza tarefas invocando workloads em intervalos recorrentes?
+    <details><summary>Resposta</summary>Cloud Scheduler.</details>
 
 ---
 
