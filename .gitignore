@@ -1,0 +1,17 @@
+# PDFs e materiais de origem (não versionar material do curso)
+*.pdf
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Editores
+.vscode/
+.idea/
+*.swp
+
+# Ambientes Python (caso adicione notebooks/scripts depois)
+__pycache__/
+.venv/
+venv/
+.ipynb_checkpoints/
