@@ -7,7 +7,7 @@ Esta pasta reúne as anotações da trilha *Data Engineering on Google Cloud*, *
 | Parte | Tema | Arquivo | Status |
 |------|------|---------|--------|
 | 1 | Introdução à Engenharia de Dados no Google Cloud | [part-01-introducao-engenharia-dados-gcp.md](part-01-introducao-engenharia-dados-gcp.md) | ✅ Concluído |
-| 2 | _(em breve)_ | `part-02-*.md` | 🚧 Em preparação |
+| 2 | Construa Data Lakes e Data Warehouses no Google Cloud | [part-02-data-lakes-e-data-warehouses.md](part-02-data-lakes-e-data-warehouses.md) | ✅ Concluído |
 
 ## Convenção de organização
 

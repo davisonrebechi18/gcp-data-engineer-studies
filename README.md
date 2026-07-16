@@ -11,6 +11,7 @@ O objetivo deste repositório é servir como material de consulta rápida: cada 
 | Parte | Tema | Notas | Status |
 |------|------|-------|--------|
 | 1 | Introdução à Engenharia de Dados no Google Cloud | [part-01-introducao-engenharia-dados-gcp.md](notes/part-01-introducao-engenharia-dados-gcp.md) | ✅ Concluído |
+| 2 | Construa Data Lakes e Data Warehouses no Google Cloud | [part-02-data-lakes-e-data-warehouses.md](notes/part-02-data-lakes-e-data-warehouses.md) | ✅ Concluído |
 
 > Novas partes da trilha serão adicionadas conforme eu avanço nos módulos.
 
@@ -39,6 +40,29 @@ Principais blocos cobertos:
 
 ---
 
+## 🧭 Visão geral da Parte 2
+
+A Parte 2 aprofunda a arquitetura de armazenamento analítico, culminando no **data lakehouse**:
+
+```
+Data Lake  +  Data Warehouse  →  Data Lakehouse
+(flexível)    (rápido)            (os dois, sem duplicar dados)
+```
+
+Principais blocos cobertos:
+
+- **Conceitos** — data lake vs data warehouse vs lakehouse; schema-on-read vs schema-on-write
+- **Base do lakehouse** — Cloud Storage, dados multimodais, **Apache Iceberg** (evolução de esquema, time travel, ACID)
+- **Dados operacionais** — AlloyDB for PostgreSQL e **consultas federadas** (`EXTERNAL_QUERY`)
+- **Arquitetura do BigQuery** — serverless, separação storage/compute, Dremel, slots, shuffle, Colossus
+- **Performance** — particionamento, clustering e pushdown de predicado (inclusive em Iceberg)
+- **BigLake** — tabelas externas, delegação de acesso, governança centralizada
+- **Governança** — Dataplex, Proteção de Dados Sensíveis, IAM, segurança em nível de linha/coluna
+- **ML** — BigQuery ML (`CREATE MODEL`) e Vertex AI
+- **Padrões** — arquitetura medallion (Bronze/Silver/Gold), estratégia de migração e otimização de custos
+
+---
+
 ## 🎯 Certificação-alvo
 
 - **Google Cloud Professional Data Engineer**
@@ -46,7 +70,9 @@ Principais blocos cobertos:
 
 ## 🧪 Labs (Qwiklabs / Cloud Skills Boost)
 
-Códigos de laboratório praticados nesta parte: `GSP1040`, `GSP1052`, *Use Serverless for Apache Spark to Load BigQuery*, *Use Cloud Run Functions to Load BigQuery*.
+**Parte 1:** `GSP1040` · `GSP1052` · *Use Serverless for Apache Spark to Load BigQuery* · *Use Cloud Run Functions to Load BigQuery*
+
+**Parte 2:** `GSP247` (BigQuery ML) · *Consulta federada com o BigQuery* · *Querying external data and Iceberg tables* · *BigQuery Vector Search*
 
 ---
 
